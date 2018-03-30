@@ -4,11 +4,7 @@ class ContactList extends React.Component {
 
 	render() {
 
-		const people = [
-			{name: 'Tyler'},
-			{name: 'Karen'},
-			{name: 'Richard'}
-		];
+		const people = this.props.contacts;
 
 		return <ol>
 			{people.map((person) => (
@@ -22,7 +18,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ContactList />
+        <ContactList contacts={[{name: 'Tyler'},{name: 'Karen'},{name:'Richard'}]}/>
+        <ContactList contacts={[{name: 'Garrett'},{name: 'Emily'},{name:'Joe'}]}/>
+        <ContactList contacts={[{name: 'Mark'},{name: 'Cheryl'},{name:'Frank'}]}/>
       </div>
     );
   }
