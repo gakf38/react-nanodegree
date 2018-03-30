@@ -19,8 +19,7 @@ class App extends Component {
     return (
       <div className="App">
         <ContactList contacts={[{name: 'Tyler'},{name: 'Karen'},{name:'Richard'}]}/>
-        <ContactList contacts={[{name: 'Garrett'},{name: 'Emily'},{name:'Joe'}]}/>
-        <ContactList contacts={[{name: 'Mark'},{name: 'Cheryl'},{name:'Frank'}]}/>
+        <ContactList contacts={[{name: 'Amanda'},{name: 'Mikenzi'},{name:'Ryan'}]}/>
       </div>
     );
   }
