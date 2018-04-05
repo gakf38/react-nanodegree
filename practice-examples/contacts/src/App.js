@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import ListContacts from './ListContacts'
 
 const contacts = [
  {
@@ -22,13 +23,13 @@ const contacts = [
 ];
 
 class App extends Component {
-  render() {
-    return (
-      <div>
-        Hello World
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div>
+                <ListContacts contacts={contacts} />
+            </div>
+        )
+    }
 }
 
 export default App;
