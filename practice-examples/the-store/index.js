@@ -41,6 +41,8 @@ function createStore(reducer) {
 }
 
 // App Code - Close to code that the user would write
+
+// TODOS Reducer Function
 function todos (state = [], action) {
 
 	switch (action.type) {
@@ -61,6 +63,7 @@ function todos (state = [], action) {
 	}
 }
 
+// GOALS Reducer Function
 function goals (state = [], action) {
 
 	switch (action.type) {
@@ -76,8 +79,17 @@ function goals (state = [], action) {
 	}
 }
 
+// Root Reducer Function
+function app (state = {}, action) {
+
+	return {
+		todos: todos(state.todos, action),
+		goals: goals(state.goals, action)
+	}
+}
+
 // Create the Store
-const store = createStore(todos)
+const store = createStore(app)
 
 // Subscribe a listener to the Store
 store.subscribe(() => {
