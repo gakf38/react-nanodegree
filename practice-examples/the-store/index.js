@@ -41,7 +41,7 @@ function createStore(reducer) {
 }
 
 // App Code - Close to code that the user would write
-function todo (state = [], action) {
+function todos (state = [], action) {
 
 	switch (action.type) {
 
@@ -55,14 +55,29 @@ function todo (state = [], action) {
 			return state.map((todo) => todo.id !== action.id ? todo : 
 				Object.assign({}, todo, { complete: !todo.complete })
 			)
-			
+
 		default :
 			return state
 	}
 }
 
+function goals (state = [], action) {
+
+	switch (action.type) {
+
+		case 'ADD_GOAL':
+			return state.concat([action.goal])
+
+		case 'REMOVE_GOAL':
+			return state.filter((goal) => goal.id === action.id)
+
+		default: 
+			return state
+	}
+}
+
 // Create the Store
-const store = createStore(todo)
+const store = createStore(todos)
 
 // Subscribe a listener to the Store
 store.subscribe(() => {
