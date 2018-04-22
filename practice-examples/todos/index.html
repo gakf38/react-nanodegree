@@ -168,7 +168,15 @@
 
 		// Subscribe a listener to the Store
 		store.subscribe(() => {
-			console.log('The new state is: ', store.getState())
+
+			const { todos, goals } = store.getState()
+
+			document.getElementById('todos').innerHTML = ''
+			document.getElementById('goals').innerHTML = ''
+
+			todos.forEach(addTodoToDOM)
+			goals.forEach(addGoalToDOM)
+
 		})	
 
 		// Dispatch actions to the Store
@@ -206,6 +214,7 @@
 
 		// store.dispatch(removeGoalAction(0))
 
+		// DOM Code -
 		function addTodo() {
 			// Get the name of the Todo
 			const input = document.getElementById('todo')
@@ -218,6 +227,14 @@
 			  complete: false,
 			  id: generateId()
 			}))
+		}
+
+		function addTodoToDOM(todo) {
+			const node = document.createElement('li')
+			const text = document.createTextNode(todo.name)
+			node.appendChild(text)
+
+			document.getElementById('todos').appendChild(node)
 		}
 
 		// Add addTodo as the on click even to the Add Todo button
@@ -234,6 +251,14 @@
 			  name,
 			  id: generateId()
 			}))
+		}
+
+		function addGoalToDOM(goal) {
+			const node = document.createElement('li')
+			const text = document.createTextNode(goal.name)
+			node.appendChild(text)
+
+			document.getElementById('goals').appendChild(node)
 		}
 
 		// Add addGoal as the on click event to the Add Goal button
