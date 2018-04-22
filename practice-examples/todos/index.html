@@ -3,6 +3,7 @@
 
 <head>
 	<title>Udacity Todos Goals</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
 </head>
 
 <body>
@@ -25,50 +26,6 @@
 
 
 	<script type="text/javascript">
-
-		// Library Code - Close to a library that would come from NPM package
-		function createStore(reducer) {
-
-			/*
-				The store should have 4 parts:
-				1. the state
-				2. interaction to get the state
-				3. interaction to listen for changes to the state
-				4. interaction to update the state
-			*/
-
-			// Define the State of the Store
-			let state 
-
-			// Define a way to get the State of the Store
-			const getState = () => state
-
-			// Define a way to listen for changes to the state
-			let listeners = []
-			const subscribe = (listener) => {
-				// Add the listener to the listeners array
-				listeners.push(listener)
-				// Return a function that can be invoked to 'unsubscribe' the added listener
-				return () => {
-					listeners = listeners.filter((l) => l !== listener)
-				}
-			}
-
-			// Define a way to update the state of the store
-			const dispatch = (action) => {
-				state = reducer(state, action)
-				listeners.forEach((listener) => listener())
-			}
-
-
-			return {
-				getState,
-				subscribe,
-				dispatch
-			}
-		}
-
-		// App Code - Close to code that the user would write
 
 		// Action type constants
 		const ADD_TODO = 'ADD_TODO'
@@ -150,22 +107,16 @@
 			}
 		}
 
-		// Root Reducer Function
-		function app (state = {}, action) {
-
-			return {
-				todos: todos(state.todos, action),
-				goals: goals(state.goals, action)
-			}
-		}
-
 		// Generate a Random ID
 		function generateId () {
 		  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 		}
 
-		// Create the Store
-		const store = createStore(app)
+		// Create the Store using the Redux library
+		const store = Redux.createStore(Redux.combineReducers({
+			todos,
+			goals
+		}))
 
 		// Subscribe a listener to the Store
 		store.subscribe(() => {
@@ -179,7 +130,7 @@
 			goals.forEach(addGoalToDOM)
 		})	
 
-		// DOM Code -
+		// DOM Code
 		function addTodo() {
 			// Get the name of the Todo
 			const input = document.getElementById('todo')
