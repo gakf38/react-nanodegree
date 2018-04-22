@@ -176,7 +176,6 @@
 
 			todos.forEach(addTodoToDOM)
 			goals.forEach(addGoalToDOM)
-
 		})	
 
 		// Dispatch actions to the Store
@@ -230,9 +229,18 @@
 		}
 
 		function addTodoToDOM(todo) {
+
 			const node = document.createElement('li')
 			const text = document.createTextNode(todo.name)
 			node.appendChild(text)
+
+			// Add a strike-through if the todo is complete
+			node.style.textDecoration = todo.complete ? 'line-through' : 'none'
+
+			// Toggle a todo's complete on click
+			node.addEventListener('click', () => {
+				store.dispatch(toggleTodoAction(todo.id))
+			})
 
 			document.getElementById('todos').appendChild(node)
 		}
@@ -254,6 +262,7 @@
 		}
 
 		function addGoalToDOM(goal) {
+
 			const node = document.createElement('li')
 			const text = document.createTextNode(goal.name)
 			node.appendChild(text)
