@@ -26,10 +26,6 @@
 
 	<script type="text/javascript">
 
-		function generateId () {
-		  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
-		}
-
 		// Library Code - Close to a library that would come from NPM package
 		function createStore(reducer) {
 
@@ -126,7 +122,7 @@
 					return state.concat([action.todo])
 
 				case REMOVE_TODO :
-					return state.filter((todo) => todo.id === action.id)
+					return state.filter((todo) => todo.id !== action.id)
 
 				case TOGGLE_TODO :
 					return state.map((todo) => todo.id !== action.id ? todo : 
@@ -147,7 +143,7 @@
 					return state.concat([action.goal])
 
 				case REMOVE_GOAL:
-					return state.filter((goal) => goal.id === action.id)
+					return state.filter((goal) => goal.id !== action.id)
 
 				default: 
 					return state
@@ -161,6 +157,11 @@
 				todos: todos(state.todos, action),
 				goals: goals(state.goals, action)
 			}
+		}
+
+		// Generate a Random ID
+		function generateId () {
+		  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 		}
 
 		// Create the Store
@@ -178,41 +179,6 @@
 			goals.forEach(addGoalToDOM)
 		})	
 
-		// Dispatch actions to the Store
-		// store.dispatch(addTodoAction({
-		//   id: 0,
-		//   name: 'Walk the dog',
-		//   complete: false,
-		// }))
-
-		// store.dispatch(addTodoAction({
-		//   id: 1,
-		//   name: 'Wash the car',
-		//   complete: false,
-		// }))
-
-		// store.dispatch(addTodoAction({
-		//   id: 2,
-		//   name: 'Go to the gym',
-		//   complete: true,
-		// }))
-
-		// store.dispatch(removeTodoAction(1))
-
-		// store.dispatch(toggleTodoAction(0))
-
-		// store.dispatch(addGoalAction({
-		//   id: 0,
-		//   name: 'Learn Redux'
-		// }))
-
-		// store.dispatch(addGoalAction({
-		//   id: 1,
-		//   name: 'Lose 20 pounds'
-		// }))
-
-		// store.dispatch(removeGoalAction(0))
-
 		// DOM Code -
 		function addTodo() {
 			// Get the name of the Todo
@@ -228,26 +194,6 @@
 			}))
 		}
 
-		function addTodoToDOM(todo) {
-
-			const node = document.createElement('li')
-			const text = document.createTextNode(todo.name)
-			node.appendChild(text)
-
-			// Add a strike-through if the todo is complete
-			node.style.textDecoration = todo.complete ? 'line-through' : 'none'
-
-			// Toggle a todo's complete on click
-			node.addEventListener('click', () => {
-				store.dispatch(toggleTodoAction(todo.id))
-			})
-
-			document.getElementById('todos').appendChild(node)
-		}
-
-		// Add addTodo as the on click even to the Add Todo button
-		document.getElementById('todoBtn').addEventListener('click', addTodo)
-
 		function addGoal() {
 			// Get the name of the Goal
 			const input = document.getElementById('goal')
@@ -261,17 +207,61 @@
 			}))
 		}
 
+		// Add addTodo as the on click even to the Add Todo button
+		document.getElementById('todoBtn').addEventListener('click', addTodo)
+
+		// Add addGoal as the on click event to the Add Goal button
+		document.getElementById('goalBtn').addEventListener('click', addGoal)
+
+		// Create a Remove Button for each Todo/Goal Item
+		function createRemoveButton (onClick) {
+	       const removeBtn = document.createElement('button')
+	       removeBtn.innerHTML = 'X'
+	       removeBtn.addEventListener('click', onClick)
+	       return removeBtn
+	    }
+
+	    // Add a Todo to the DOM
+		function addTodoToDOM(todo) {
+
+			const node = document.createElement('li')
+			const text = document.createTextNode(todo.name)
+
+			// Define the Remove Button
+			const removeBtn = createRemoveButton(() => {
+		        store.dispatch(removeTodoAction(todo.id))
+		    })
+
+			node.appendChild(text)
+			node.appendChild(removeBtn)
+
+			// Add a strike-through if the todo is complete
+			node.style.textDecoration = todo.complete ? 'line-through' : 'none'
+
+			// Toggle a todo's complete on click
+			node.addEventListener('click', () => {
+				store.dispatch(toggleTodoAction(todo.id))
+			})
+
+			document.getElementById('todos').appendChild(node)
+		}
+
+		// Add a Goald to the DOM
 		function addGoalToDOM(goal) {
 
 			const node = document.createElement('li')
 			const text = document.createTextNode(goal.name)
+
+			// Define the Remove Button
+			const removeBtn = createRemoveButton(() => {
+				store.dispatch(removeGoalAction(goal.id))
+			})
+
 			node.appendChild(text)
+			node.appendChild(removeBtn)
 
 			document.getElementById('goals').appendChild(node)
 		}
-
-		// Add addGoal as the on click event to the Add Goal button
-		document.getElementById('goalBtn').addEventListener('click', addGoal)
 
 	</script>
 
