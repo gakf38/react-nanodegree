@@ -112,11 +112,34 @@
 		  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 		}
 
+		// Redux Middleware
+		// checker function is passed the store
+		// which returns a function that is passed next (the next middleware to be executed or store.dispatch)
+		// which returns a function that is passed the action
+		const checker = (store) => (next) => (action) => {
+
+			if (
+				action.type === ADD_TODO &&
+				action.todo.name.toLowerCase().includes('bitcoin')
+			) {
+				return alert("Nope. That is a bad idea.")
+			}
+
+			if (
+				action.type === ADD_GOAL &&
+				action.goal.name.toLowerCase().includes('bitcoin')
+			) {
+				return alert("Nope. That is a bad idea.")
+			}
+
+			next(action)
+		}
+
 		// Create the Store using the Redux library
 		const store = Redux.createStore(Redux.combineReducers({
 			todos,
 			goals
-		}))
+		}), Redux.applyMiddleware(checker))
 
 		// Subscribe a listener to the Store
 		store.subscribe(() => {
