@@ -112,7 +112,7 @@
 		  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 		}
 
-		// Redux Middleware
+		// Checker Middleware Function
 		// checker function is passed the store
 		// which returns a function that is passed next (the next middleware to be executed or store.dispatch)
 		// which returns a function that is passed the action
@@ -135,11 +135,20 @@
 			next(action)
 		}
 
+		// Logger Middleware Function
+		const logger = (store) => (next) => (action) => {
+			console.group(action.type)
+				console.log('The action: ', action)
+				const result = next(action)
+				console.log('The new state: ', store.getState())
+			console.groupEnd()
+		}
+
 		// Create the Store using the Redux library
 		const store = Redux.createStore(Redux.combineReducers({
 			todos,
 			goals
-		}), Redux.applyMiddleware(checker))
+		}), Redux.applyMiddleware(checker, logger))
 
 		// Subscribe a listener to the Store
 		store.subscribe(() => {
