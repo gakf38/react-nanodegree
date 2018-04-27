@@ -11,24 +11,6 @@
 
 <body>
 
-	<!-- Todo List UI -->
-	<div>
-		<h1>Todo List</h1>
-		<input id='todo' type='text' placeholder='Add Todo' />
-		<button id='todoBtn'>Add Todo</button>
-		<ul id='todos'></ul>
-	</div>
-
-	<!-- Goals UI -->
-	<div>
-		<h1>Goals</h1>
-		<input id='goal' type='text' placeholder='Add Goal' />
-		<button id='goalBtn'>Add Goal</button>
-		<ul id='goals'></ul>
-	</div>
-
-	<hr />
-
 	<div id='app'></div>
 
 
@@ -157,102 +139,6 @@
 			goals
 		}), Redux.applyMiddleware(checker, logger))
 
-		// Subscribe a listener to the Store
-		store.subscribe(() => {
-
-			const { todos, goals } = store.getState()
-
-			document.getElementById('todos').innerHTML = ''
-			document.getElementById('goals').innerHTML = ''
-
-			todos.forEach(addTodoToDOM)
-			goals.forEach(addGoalToDOM)
-		})	
-
-		// DOM Code
-		function addTodo() {
-			// Get the name of the Todo
-			const input = document.getElementById('todo')
-			const name = input.value
-			input.value = ''
-
-			// Dispatch the addTodoAction with the retrieved todo name
-			store.dispatch(addTodoAction({
-			  name,
-			  complete: false,
-			  id: generateId()
-			}))
-		}
-
-		function addGoal() {
-			// Get the name of the Goal
-			const input = document.getElementById('goal')
-			const name = input.value
-			input.value = ''
-
-			// Dispatchthe addGoalAction with the retrieved goal name
-			store.dispatch(addGoalAction({
-			  name,
-			  id: generateId()
-			}))
-		}
-
-		// Add addTodo as the on click even to the Add Todo button
-		document.getElementById('todoBtn').addEventListener('click', addTodo)
-
-		// Add addGoal as the on click event to the Add Goal button
-		document.getElementById('goalBtn').addEventListener('click', addGoal)
-
-		// Create a Remove Button for each Todo/Goal Item
-		function createRemoveButton (onClick) {
-	       const removeBtn = document.createElement('button')
-	       removeBtn.innerHTML = 'X'
-	       removeBtn.addEventListener('click', onClick)
-	       return removeBtn
-	    }
-
-	    // Add a Todo to the DOM
-		function addTodoToDOM(todo) {
-
-			const node = document.createElement('li')
-			const text = document.createTextNode(todo.name)
-
-			// Define the Remove Button
-			const removeBtn = createRemoveButton(() => {
-		        store.dispatch(removeTodoAction(todo.id))
-		    })
-
-			node.appendChild(text)
-			node.appendChild(removeBtn)
-
-			// Add a strike-through if the todo is complete
-			node.style.textDecoration = todo.complete ? 'line-through' : 'none'
-
-			// Toggle a todo's complete on click
-			node.addEventListener('click', () => {
-				store.dispatch(toggleTodoAction(todo.id))
-			})
-
-			document.getElementById('todos').appendChild(node)
-		}
-
-		// Add a Goald to the DOM
-		function addGoalToDOM(goal) {
-
-			const node = document.createElement('li')
-			const text = document.createTextNode(goal.name)
-
-			// Define the Remove Button
-			const removeBtn = createRemoveButton(() => {
-				store.dispatch(removeGoalAction(goal.id))
-			})
-
-			node.appendChild(text)
-			node.appendChild(removeBtn)
-
-			document.getElementById('goals').appendChild(node)
-		}
-
 	</script>
 
 	<script type='text/babel'>
@@ -262,7 +148,10 @@
 				<ul>
 					{props.items.map((item) => (
 						<li key={item.id}>
-							<span>{item.name}</span>
+							<span
+								onClick={() => props.toggle && props.toggle(item.id)}
+								style={{textDecoration: item.complete ? 'line-through' : 'none'}}
+							>{item.name}</span>
 							<button onClick={() => props.remove(item)}>
 								X
 							</button>
@@ -291,6 +180,10 @@
 				this.props.store.dispatch(removeTodoAction(todo.id))
 			}
 
+			toggleItem = (id) => {
+				this.props.store.dispatch(toggleTodoAction(id))
+			}
+
 			render() {
 				return (
 					<div>
@@ -304,6 +197,7 @@
 						<List 
 							items={this.props.todos} 
 							remove={this.removeItem}
+							toggle={this.toggleItem}
 						/>
 					</div>
 				)
@@ -324,7 +218,7 @@
 			}
 
 			removeItem = (goal) => {
-				this.props.state.dispatch(removeGoalAction(goal.id))
+				this.props.store.dispatch(removeGoalAction(goal.id))
 			}
 
 			render() {
