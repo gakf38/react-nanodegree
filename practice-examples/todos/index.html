@@ -327,6 +327,13 @@
 		}
 
 		class App extends React.Component {
+			componentDidMount() {
+				const { store } = this.props
+
+				// Subscribe the forceUpdate function to cause a re-render whenever our store changes
+				store.subscribe(() => this.forceUpdate())
+			}
+
 			render() {
 				return (
 					<div>
