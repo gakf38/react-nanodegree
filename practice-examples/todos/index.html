@@ -112,6 +112,20 @@
 			}
 		}
 
+		// LOADING STATE Reducer Function
+		function loading (state = true, action) {
+
+			switch (action.type) {
+
+				case RECEIVE_DATA:
+					return false
+
+				default:
+					return state
+
+			}
+		}
+
 		// Generate a Random ID
 		function generateId () {
 		  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
@@ -152,7 +166,8 @@
 		// Create the Store using the Redux library
 		const store = Redux.createStore(Redux.combineReducers({
 			todos,
-			goals
+			goals,
+			loading
 		}), Redux.applyMiddleware(checker, logger))
 
 	</script>
@@ -261,6 +276,7 @@
 			componentDidMount() {
 				const { store } = this.props
 
+				// Request data on render, wait for all promises to resolve
 				Promise.all([
 					API.fetchTodos(),
 					API.fetchGoals()
@@ -276,7 +292,13 @@
 			render() {
 
 				const { store } = this.props
-				const { todos, goals } = store.getState()
+				const { todos, goals, loading } = store.getState()
+
+				// Check if the RECIEVE_DATA action has been dispatched
+				if (loading === true)
+				{
+					return <h3>Loading</h3>
+				}
 
 				return (
 					<div>
