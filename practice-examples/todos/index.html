@@ -23,6 +23,7 @@
 		const TOGGLE_TODO = 'TOGGLE_TODO'
 		const ADD_GOAL = 'ADD_GOAL'
 		const REMOVE_GOAL = 'REMOVE_GOAL'
+		const RECEIVE_DATA = 'RECEIVE_DATA'
 
 		// Action Creator Functions
 		function addTodoAction (todo) {
@@ -60,6 +61,14 @@
 			}
 		}
 
+		function receiveDataAction (todos, goals) {
+			return {
+				type: RECEIVE_DATA,
+				todos,
+				goals
+			}
+		}
+
 		// TODOS Reducer Function
 		function todos (state = [], action) {
 
@@ -76,6 +85,9 @@
 						Object.assign({}, todo, { complete: !todo.complete })
 					)
 
+				case RECEIVE_DATA :
+					return action.todos
+
 				default :
 					return state
 			}
@@ -91,6 +103,9 @@
 
 				case REMOVE_GOAL:
 					return state.filter((goal) => goal.id !== action.id)
+
+				case RECEIVE_DATA:
+					return action.goals
 
 				default: 
 					return state
@@ -245,6 +260,14 @@
 		class App extends React.Component {
 			componentDidMount() {
 				const { store } = this.props
+
+				Promise.all([
+					API.fetchTodos(),
+					API.fetchGoals()
+				])
+				.then(([todos, goals]) => {
+					store.dispatch(receiveDataAction(todos, goals))
+				});
 
 				// Subscribe the forceUpdate function to cause a re-render whenever our store's state changes
 				store.subscribe(() => this.forceUpdate())
