@@ -132,6 +132,19 @@
 			}
 		}
 
+		function handleInitialData () {
+			return (dispatch) => {
+				// Request data on render, wait for all promises to resolve
+				return Promise.all([
+					API.fetchTodos(),
+					API.fetchGoals()
+				])
+				.then(([todos, goals]) => {
+					dispatch(receiveDataAction(todos, goals))
+				});
+			}
+		}
+
 		// TODOS Reducer Function
 		function todos (state = [], action) {
 
@@ -260,18 +273,20 @@
 			addItem = (e) => {
 				e.preventDefault()
 
+				// Dispatch the action creator to return a function to the Thunk
 				this.props.store.dispatch(handleAddTodo(
 					this.input.value,
 					() => this.input.value = ''
 				))
 			}
 
-			// Utilize the Optomistic Update technique
 			removeItem = (todo) => {
+				// Dispatch the action creator to return a function to the Thunk
 				this.props.store.dispatch(handleDeleteTodo(todo))
 			}
 
 			toggleItem = (id) => {
+				// Dispatch the action creator to return a function to the Thunk
 				this.props.store.dispatch(handleToggle(id))
 			}
 
@@ -299,6 +314,8 @@
 
 			addItem = (e) => {
 				e.preventDefault()
+
+				// Dispatch the action creator to return a function to the Thunk
 				this.props.store.dispatch(handleAddGoal(
 					this.input.value,
 					() => this.input.value = ''
@@ -306,6 +323,7 @@
 			}
 
 			removeItem = (goal) => {
+				// Dispatch the action creator to return a function to the Thunk
 				this.props.store.dispatch(handleDeleteGoal(goal))
 			}
 
@@ -333,14 +351,8 @@
 			componentDidMount() {
 				const { store } = this.props
 
-				// Request data on render, wait for all promises to resolve
-				Promise.all([
-					API.fetchTodos(),
-					API.fetchGoals()
-				])
-				.then(([todos, goals]) => {
-					store.dispatch(receiveDataAction(todos, goals))
-				});
+				// Dispatch the action creator to return a function to the Thunk
+				store.dispatch(handleInitialData())
 
 				// Subscribe the forceUpdate function to cause a re-render whenever our store's state changes
 				store.subscribe(() => this.forceUpdate())
