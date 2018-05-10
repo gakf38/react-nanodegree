@@ -274,7 +274,7 @@
 				e.preventDefault()
 
 				// Dispatch the action creator to return a function to the Thunk
-				this.props.store.dispatch(handleAddTodo(
+				this.props.dispatch(handleAddTodo(
 					this.input.value,
 					() => this.input.value = ''
 				))
@@ -282,12 +282,12 @@
 
 			removeItem = (todo) => {
 				// Dispatch the action creator to return a function to the Thunk
-				this.props.store.dispatch(handleDeleteTodo(todo))
+				this.props.dispatch(handleDeleteTodo(todo))
 			}
 
 			toggleItem = (id) => {
 				// Dispatch the action creator to return a function to the Thunk
-				this.props.store.dispatch(handleToggle(id))
+				this.props.sdispatch(handleToggle(id))
 			}
 
 			render() {
@@ -306,6 +306,22 @@
 							toggle={this.toggleItem}
 						/>
 					</div>
+				)
+			}
+		}
+
+		// Connected Component to pass the necessary portions of the store to the Todos Presentation Component
+		class ConnectedTodos extends React.Component {
+
+			render() {
+				return (
+					<Context.Consumer>
+						{(store) => (
+							const { todos } = store.getState()
+
+							return <Todos todos={todos} dispatch={store.dispatch} />
+						)}
+					</Context.Consumer>
 				)
 			}
 		}
@@ -347,7 +363,7 @@
 			}
 		}
 
-		//
+		// Connected Component to pass the necessary portions of the store to the Goals Presentation Component
 		class ConnectedGoals extends React.Component {
 
 			render() {
@@ -356,7 +372,7 @@
 						{(store) => (
 							const { goals } = store.getState()
 
-							return <Goals goals={goals} dispatch={store.dispatch}/>
+							return <Goals goals={goals} dispatch={store.dispatch} />
 						)}
 					</Context.Consumer>
 				)
@@ -377,7 +393,7 @@
 			render() {
 
 				const { store } = this.props
-				const { todos, loading } = store.getState()
+				const { loading } = store.getState()
 
 				// Check if the RECIEVE_DATA action has been dispatched
 				if (loading === true)
@@ -387,14 +403,14 @@
 
 				return (
 					<div>
-						<Todos todos={todos} store={this.props.store}/>
+						<ConnectedTodos />
 						<ConnectedGoals />
 					</div>
 				)
 			}
 		}
 
-		// Utilizies a Connected Component to ensure the App component can access the store beyond just it's render method
+		// Connected Component to ensure the App component can access the store beyond just it's render method
 		class ConnectedApp extends React.Component {
 
 			render() {
