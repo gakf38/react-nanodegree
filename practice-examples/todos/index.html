@@ -316,11 +316,11 @@
 			render() {
 				return (
 					<Context.Consumer>
-						{(store) => (
+						{(store) => {
 							const { todos } = store.getState()
 
 							return <Todos todos={todos} dispatch={store.dispatch} />
-						)}
+						}}
 					</Context.Consumer>
 				)
 			}
@@ -369,11 +369,11 @@
 			render() {
 				return (
 					<Context.Consumer>
-						{(store) => (
+						{(store) => {
 							const { goals } = store.getState()
 
 							return <Goals goals={goals} dispatch={store.dispatch} />
-						)}
+						}}
 					</Context.Consumer>
 				)
 			}
@@ -441,7 +441,7 @@
 
 		ReactDOM.render(
 			<Provider store={store}>
-				<App />
+				<ConnectedApp />
 			</Provider>,
 			document.getElementById('app')
 		)
