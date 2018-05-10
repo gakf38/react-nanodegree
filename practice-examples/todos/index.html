@@ -316,7 +316,7 @@
 				e.preventDefault()
 
 				// Dispatch the action creator to return a function to the Thunk
-				this.props.store.dispatch(handleAddGoal(
+				this.props.dispatch(handleAddGoal(
 					this.input.value,
 					() => this.input.value = ''
 				))
@@ -324,7 +324,7 @@
 
 			removeItem = (goal) => {
 				// Dispatch the action creator to return a function to the Thunk
-				this.props.store.dispatch(handleDeleteGoal(goal))
+				this.props.dispatch(handleDeleteGoal(goal))
 			}
 
 			render() {
@@ -347,6 +347,22 @@
 			}
 		}
 
+		//
+		class ConnectedGoals extends React.Component {
+
+			render() {
+				return (
+					<Context.Consumer>
+						{(store) => (
+							const { goals } = store.getState()
+
+							return <Goals goals={goals} dispatch={store.dispatch}/>
+						)}
+					</Context.Consumer>
+				)
+			}
+		}
+
 		class App extends React.Component {
 			componentDidMount() {
 				const { store } = this.props
@@ -361,7 +377,7 @@
 			render() {
 
 				const { store } = this.props
-				const { todos, goals, loading } = store.getState()
+				const { todos, loading } = store.getState()
 
 				// Check if the RECIEVE_DATA action has been dispatched
 				if (loading === true)
@@ -372,10 +388,24 @@
 				return (
 					<div>
 						<Todos todos={todos} store={this.props.store}/>
-						<Goals goals={goals} store={this.props.store}/>
+						<ConnectedGoals />
 					</div>
 				)
 			}
+		}
+
+		// Utilizies a Connected Component to ensure the App component can access the store beyond just it's render method
+		class ConnectedApp extends React.Component {
+
+			render() {
+				return (
+					<Context.Consumer>
+						{(store) => (
+							<App store={store}/>
+						)}
+					</Context.Consumer>
+				)
+			} 
 		}
 
 		const Context = React.createContext()
@@ -385,6 +415,7 @@
 			render() {
 				return (
 					// Render a Context.Provider component (and any of it's children) the store passed as the value prop
+					// Any child component that uses Context.Consumer can now access the store
 					<Context.Provider value={this.props.store}>
 						{this.props.children}
 					</Context.Provider>
@@ -393,7 +424,9 @@
 		}
 
 		ReactDOM.render(
-			<App store={store}/>,
+			<Provider store={store}>
+				<App />
+			</Provider>,
 			document.getElementById('app')
 		)
 
