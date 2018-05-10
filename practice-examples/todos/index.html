@@ -380,6 +380,18 @@
 
 		const Context = React.createContext()
 
+		// Custom Abstraction of the Context Provider Component
+		class Provider extends React.Component {
+			render() {
+				return (
+					// Render a Context.Provider component (and any of it's children) the store passed as the value prop
+					<Context.Provider value={this.props.store}>
+						{this.props.children}
+					</Context.Provider>
+				)
+			}
+		}
+
 		ReactDOM.render(
 			<App store={store}/>,
 			document.getElementById('app')
