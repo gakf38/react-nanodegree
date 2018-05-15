@@ -9,6 +9,7 @@
 	<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 	<script src="https://tylermcginnis.com/goals-todos-api/index.js"></script>
 	<script src="https://unpkg.com/redux-thunk@2.2.0/dist/redux-thunk.min.js"></script>
+	<script src="https://unpkg.com/react-redux@5.0.6/dist/react-redux.min.js"></script>
 </head>
 
 <body>
@@ -311,7 +312,7 @@
 		}
 
 		// Utilizing the Context.Consumer abstraction function to properly get the data from the provider
-		const ConnectedTodos = connect((state) => ({
+		const ConnectedTodos = ReactRedux.connect((state) => ({
 			todos: state.todos
 		}))(Todos)
 
@@ -353,7 +354,7 @@
 		}
 
 		// Utilizing the Context.Consumer abstraction function to properly get the data from the provider
-		const ConnectedGoals = connect((state) => ({
+		const ConnectedGoals = ReactRedux.connect((state) => ({
 			goals: state.goals
 		}))(Goals)
 
@@ -383,78 +384,15 @@
 		}
 
 		// Utilizing the Context.Consumer abstraction function to properly get the data from the provider
-		const ConnectedApp = connect((state) =>({
+		const ConnectedApp = ReactRedux.connect((state) =>({
 			loading: state.loading
 		}))(App)
 
-		const Context = React.createContext()
-
-		function connect(mapStateToProps) {
-			return (Component) => {
-
-				// Create the Receiver component to properly define the given Component and assigning the correct props
-				class Receiver extends React.Component {
-					
-					// Subscribe the forceUpdate function to the store
-					componentDidMount() {
-
-						const { subscribe } = this.props.store
-
-						this.unsubscribe = subscribe(() => {
-							this.forceUpdate()
-						}) 
-					}
-
-					// Unsubscribe when the component unmounts
-					componentWillUnmount() {
-						this.unsubscribe()
-					}
-
-					// Render the given Component along with the required props
-					render() {
-						const { dispatch, getState } = this.props.store
-						const state = getState()
-						const stateNeeded = mapStateToProps(state)
-
-						return <Component {...stateNeeded} dispatch={dispatch} />
-					}
-				}
-
-				// Create the ConnectedComponent that wraps the Receiver component in the Context.Consumer component
-				class ConnectedComponent extends React.Component {
-					
-					render() {
-						return (
-							<Context.Consumer>
-								{ (store) => <Receiver store={store}/> }
-							</Context.Consumer>
-						)
-					}
-				}
-
-				// Return the ConnectedComponent
-				return ConnectedComponent
-			}
-		}
-
-		// Custom Abstraction of the Context Provider Component
-		class Provider extends React.Component {
-			render() {
-				return (
-					// Render a Context.Provider component (and any of it's children) the store passed as the value prop
-					// Any child component that uses Context.Consumer can now access the store
-					<Context.Provider value={this.props.store}>
-						{this.props.children}
-					</Context.Provider>
-				)
-			}
-		}
-
 		// Utilizes Context library to pass the store (via Provider) to the different children (connected consumer) 
 		ReactDOM.render(
-			<Provider store={store}>
+			<ReactRedux.Provider store={store}>
 				<ConnectedApp />
-			</Provider>,
+			</ReactRedux.Provider>,
 			document.getElementById('app')
 		)
 
