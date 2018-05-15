@@ -395,6 +395,7 @@
 				// Create the Receiver component to properly define the given Component and assigning the correct props
 				class Receiver extends React.Component {
 					
+					// Subscribe the forceUpdate function to the store
 					componentDidMount() {
 
 						const { subscribe } = this.props.store
@@ -404,10 +405,12 @@
 						}) 
 					}
 
+					// Unsubscribe when the component unmounts
 					componentWillUnmount() {
 						this.unsubscribe()
 					}
 
+					// Render the given Component along with the required props
 					render() {
 						const { dispatch, getState } = this.props.store
 						const state = getState()
