@@ -392,6 +392,7 @@
 		function connect(mapStateToProps) {
 			return (Component) => {
 
+				// Create the Receiver component to properly define the given Component and assigning the correct props
 				class Receiver extends React.Component {
 					
 					componentDidMount() {
@@ -416,6 +417,7 @@
 					}
 				}
 
+				// Create the ConnectedComponent that wraps the Receiver component in the Context.Consumer component
 				class ConnectedComponent extends React.Component {
 					
 					render() {
@@ -427,6 +429,7 @@
 					}
 				}
 
+				// Return the ConnectedComponent
 				return ConnectedComponent
 			}
 		}
