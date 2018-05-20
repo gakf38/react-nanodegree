@@ -7,7 +7,7 @@ import users from './users'
 import tweets from './tweets'
 
 // Root Reducer Function
-export default function combineReducers({
+export default combineReducers({
 	authedUsers,
 	users,
 	tweets
