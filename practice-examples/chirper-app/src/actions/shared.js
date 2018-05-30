@@ -4,7 +4,7 @@ import { getInitialData } from '../utils/api'
 // Action Creators
 import { receiveUsers } from '../actions/users'
 import { receiveTweets } from '../actions/tweets'
-import { setAuthedUser } from '../actions/authedUser'
+import { setAuthedUser } from '../actions/authedUsers'
 
 // Authenicated User (must be one of three users in utils/_DATA.js)
 const AUTHED_ID = 'tylermcginnis'
