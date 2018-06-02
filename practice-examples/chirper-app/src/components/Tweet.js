@@ -7,6 +7,9 @@ import { connect } from 'react-redux'
 // Helper Functions
 import { formatTweet, formatDate } from '../utils/helpers' 
 
+// handleToggleTweet Function
+import { handleToggleTweet } from '../actions/tweets'
+
 // Tweet Icons
 import TiArrowBackOutline from 'react-icons/lib/ti/arrow-back-outline'
 import TiHeartOutline from 'react-icons/lib/ti/heart-outline'
@@ -20,8 +23,17 @@ class Tweet extends Component {
 	}
 
 	handleLike = (e) => {
+		
 		e.preventDefault()
-		// todo: handle like tweet
+		
+		const { dispatch, tweet, authedUser } = this.props
+
+		// Dispatch the async Toggle Tweet action creator
+		dispatch(handleToggleTweet({
+			id: tweet.id,
+			hasLiked: tweet.hasLiked,
+			authedUser
+		}))
 	}
 
 	render() {

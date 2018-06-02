@@ -7,11 +7,11 @@ import { connect } from 'react-redux'
 // Handle Initial Data Action Creator
 import { handleInitialData } from '../actions/shared'
 
-// Components
-import Dashboard from './Dashboard'
-
 // React Redux Loading Component
 import LoadingBar from 'react-redux-loading'
+
+// Components
+import Dashboard from './Dashboard'
 
 class App extends Component {
 
@@ -23,7 +23,7 @@ class App extends Component {
       <div>
         <LoadingBar />
         {
-          (this.props.loading === true)
+          this.props.loading === true
           ? null 
           : <Dashboard />
         }
