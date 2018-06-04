@@ -1,9 +1,35 @@
 // saveLikeToggle API function
-import { saveLikeToggle } from '../utils/api'
+import { saveLikeToggle, saveTweet } from '../utils/api'
+
+// React Redux Loading Action Creators
+import { showLoading, hideLoading } from 'react-redux-loading'
 
 // Tweets Action Types
 export const RECEIVE_TWEETS = 'RECEIVE_TWEETS'
 export const TOGGLE_TWEET = 'TOGGLE_TWEET'
+export const ADD_TWEET = 'ADD_TWEET'
+
+// Add Tweet Action Creator Function
+function addTweet(tweet) {
+	return {
+		type: ADD_TWEET,
+		tweet
+	}
+}
+
+// Add Tweet Async Action Creator Function
+export function handleAddTweet(text, replyingTo) {
+	return (dispatch, getState) => {
+		
+		const { authedUsers } = getState()
+
+		dispatch(showLoading())
+
+		return saveTweet({ text, author: authedUsers, replyingTo })
+			.then((tweet) => dispatch(addTweet(tweet)))
+			.then(() => dispatch(hideLoading()))
+	}
+}
 
 // Receive Tweets Action Creator Function
 export function receiveTweets(tweets) {

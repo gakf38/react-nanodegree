@@ -1,6 +1,12 @@
 // React Library
 import React, { Component } from 'react'
 
+// React Redux Connect function
+import { connect } from 'react-redux'
+
+// handleAddTweet Function
+import { handleAddTweet } from '../actions/tweets'
+
 class NewTweet extends Component {
 
 	// Using component state instead of Redux state because of simplicity of the use
@@ -22,10 +28,9 @@ class NewTweet extends Component {
 		e.preventDefault()
 
 		const { text } = this.state
+		const { dispatch, id } = this.props
 
-		// todo: Add Tweet to Redux Store
-
-		console.log('New Tweet: ' + text)
+		dispatch(handleAddTweet(text, id))
 
 		this.setState(() => ({
 			text: ''
@@ -71,4 +76,4 @@ class NewTweet extends Component {
 	}
 }
 
-export default NewTweet
+export default connect()(NewTweet)
