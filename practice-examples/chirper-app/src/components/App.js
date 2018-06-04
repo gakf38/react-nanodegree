@@ -12,6 +12,7 @@ import LoadingBar from 'react-redux-loading'
 
 // Components
 import Dashboard from './Dashboard'
+import NewTweet from './NewTweet'
 
 class App extends Component {
 
@@ -25,7 +26,7 @@ class App extends Component {
         {
           this.props.loading === true
           ? null 
-          : <Dashboard />
+          : <NewTweet />
         }
       </div>
     )
@@ -33,9 +34,9 @@ class App extends Component {
 }
 
 // Maps a boolean of true/false to the loading prop depending on if the authedUser state of the store is populated
-function mapStateToProps({ authedUser }) {
+function mapStateToProps({ authedUsers }) {
   return {
-    loading: authedUser === null
+    loading: authedUsers === null
   }
 }
 
