@@ -79,7 +79,7 @@ export function getMetricMetaInfo (metric) {
           <View>
             <MaterialCommunityIcons
               name='bike'
-              color={white}
+              color={'black'}
               size={32}
             />
           </View>
