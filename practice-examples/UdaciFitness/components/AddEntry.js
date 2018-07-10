@@ -26,11 +26,9 @@ class AddEntry extends Component {
 	increment = (metric) => {
 
 		const { max, step } = getMetricMetaInfo(metric)
-
+		
 		this.setState((state) => {
-
 			const count = state[metric] + step
-
 			return {
 				...state,
 				[metric]: count > max ? max : count
@@ -39,11 +37,8 @@ class AddEntry extends Component {
 	}
 
 	decrement = (metric) => {
-
 		this.setState((state) => {
-
 			const count = state[metric] - getMetricMetaInfo(metric).step
-
 			return {
 				...state,
 				[metric]: count < 0 ? 0 : count
@@ -52,7 +47,6 @@ class AddEntry extends Component {
 	}
 
 	slide = (metric, value) => {
-
 		this.setState(() => ({
 			[metric]: value
 		}))
