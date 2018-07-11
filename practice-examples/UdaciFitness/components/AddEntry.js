@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { getMetricMetaInfo, timeToString } from '../utils/helpers'
+import { submitEntry, removeEntry } from '../utils/api'
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
 import DateHeader from './DateHeader'
@@ -71,7 +72,7 @@ class AddEntry extends Component {
 
 		// Navigate to home
 
-		// Save to 'DB'
+		submitEntry({ key, entry })
 
 		// Clear local notification
 	}
@@ -84,7 +85,7 @@ class AddEntry extends Component {
 
 		// Route to Home
 
-		// Update 'DB'
+		removeEntry(key)
 	}
 
 	render() {
