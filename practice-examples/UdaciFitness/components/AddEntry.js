@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native
 import { connect } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers'
-import { white, purple } from './utils/colors'
+import { white, purple } from '../utils/colors'
 import { submitEntry, removeEntry } from '../utils/api'
 import { addEntry } from '../actions'
 import UdaciSlider from './UdaciSlider'
@@ -14,7 +14,7 @@ import TextButton from './TextButton'
 function SubmitBtn ({ onPress }) {
 	return (
 		<TouchableOpacity 
-			style={Platform.OS === 'ios' ? styles.iosSubmitBtn : style.androidSubmitBtn}
+			style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
 			onPress={onPress}
 		>
 			<Text style={styles.submitBtnText}>SUBMIT</Text>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
 		borderRadius: 2,
 		alignSelf: 'flex-end',
 		justifyContent: 'center',
-		alginItems: 'center'
+		alignItems: 'center'
 	},
 	submitBtnText: {
 		color: white,
